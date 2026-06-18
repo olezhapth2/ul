@@ -3,11 +3,10 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Container from '@mui/material/Container';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
@@ -15,6 +14,53 @@ import theme from './theme';
 import { initialCompanies } from './data/companies';
 import SearchPage from './pages/SearchPage';
 import ProfilePage from './pages/ProfilePage';
+
+function SegmentedTabs({ value, onChange, disabled }) {
+  const tabs = [
+    { value: 'search', label: 'Поиск', icon: <SearchIcon sx={{ fontSize: 18 }} /> },
+    { value: 'profile', label: 'Профиль', icon: <PersonIcon sx={{ fontSize: 18 }} /> },
+  ];
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        borderRadius: '8px',
+        padding: '3px',
+        gap: '2px',
+      }}
+    >
+      {tabs.map((tab) => (
+        <Box
+          key={tab.value}
+          onClick={() => !disabled?.includes(tab.value) && onChange(tab.value)}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            px: '14px',
+            py: '7px',
+            borderRadius: '6px',
+            cursor: disabled?.includes(tab.value) ? 'not-allowed' : 'pointer',
+            opacity: disabled?.includes(tab.value) ? 0.4 : 1,
+            backgroundColor: value === tab.value ? '#5B5FEF' : 'transparent',
+            color: value === tab.value ? '#FFFFFF' : 'rgba(255,255,255,0.6)',
+            fontWeight: 500,
+            fontSize: 14,
+            transition: 'all 150ms ease',
+            '&:hover': value !== tab.value && !disabled?.includes(tab.value)
+              ? { backgroundColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.9)' }
+              : {},
+          }}
+        >
+          {tab.icon}
+          {tab.label}
+        </Box>
+      ))}
+    </Box>
+  );
+}
 
 export default function App() {
   const [companies, setCompanies] = useState(initialCompanies);
@@ -73,36 +119,45 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="static" sx={{ backgroundColor: '#202020' }}>
-        <Toolbar>
-          <LocalShippingIcon sx={{ mr: 1 }} />
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: '#15171C',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+        }}
+      >
+        <Toolbar sx={{ gap: '16px' }}>
+          <LocalShippingIcon sx={{ fontSize: 24, opacity: 0.9 }} />
+          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 600, fontSize: 16 }}>
             Кабинет перевозчика
           </Typography>
-          <Tabs
+
+          <SegmentedTabs
             value={screen}
-            onChange={(_, v) => setScreen(v)}
-            textColor="inherit"
-            indicatorColor="secondary"
+            onChange={setScreen}
+            disabled={screen === 'profile' && !selectedCompanyId ? ['profile'] : []}
+          />
+
+          <Box
+            sx={{
+              width: 32,
+              height: 32,
+              borderRadius: '50%',
+              backgroundColor: 'rgba(255,255,255,0.12)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              ml: '8px',
+            }}
           >
-            <Tab
-              label="Поиск"
-              value="search"
-              icon={<SearchIcon />}
-              iconPosition="start"
-            />
-            <Tab
-              label="Профиль"
-              value="profile"
-              icon={<PersonIcon />}
-              iconPosition="start"
-              disabled={!selectedCompanyId}
-            />
-          </Tabs>
+            <Typography sx={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.8)' }}>
+              ОД
+            </Typography>
+          </Box>
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="lg" sx={{ py: 3 }}>
+      <Container maxWidth="lg" sx={{ py: '32px' }}>
         {screen === 'search' && (
           <SearchPage
             companies={companies}
@@ -112,15 +167,17 @@ export default function App() {
           />
         )}
         {screen === 'profile' && selectedCompany && (
-          <ProfilePage
-            company={selectedCompany}
-            onBack={() => setScreen('search')}
-            onChangeStatus={updateCompanyStatus}
-            onSendRequest={handleSendRequest}
-            onCancelRequest={handleCancelRequest}
-            onTerminate={handleTerminate}
-            onReapply={handleReapply}
-          />
+          <Box sx={{ maxWidth: 900, mx: 'auto' }}>
+            <ProfilePage
+              company={selectedCompany}
+              onBack={() => setScreen('search')}
+              onChangeStatus={updateCompanyStatus}
+              onSendRequest={handleSendRequest}
+              onCancelRequest={handleCancelRequest}
+              onTerminate={handleTerminate}
+              onReapply={handleReapply}
+            />
+          </Box>
         )}
       </Container>
 

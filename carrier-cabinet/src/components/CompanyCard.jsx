@@ -5,11 +5,10 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
-import BusinessIcon from '@mui/icons-material/Business';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import WorkIcon from '@mui/icons-material/Work';
+import Divider from '@mui/material/Divider';
 import StatusBadge from './StatusBadge';
 import MatchBlock from './MatchBlock';
+import { getAvatarColor, getInitials } from '../utils/avatar';
 
 export default function CompanyCard({ company, onSendRequest, onReapply, onClickCard }) {
   const isRejected = company.status === 'rejected';
@@ -20,42 +19,61 @@ export default function CompanyCard({ company, onSendRequest, onReapply, onClick
 
   return (
     <Card
-      sx={{ cursor: 'pointer', '&:hover': { boxShadow: 3 } }}
+      sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column' }}
       onClick={() => onClickCard(company.id)}
     >
-      <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
-          <Typography variant="h6" component="div">
-            {company.name}
-          </Typography>
-          {isRejected && <StatusBadge status={company.status} />}
-        </Box>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, mb: 1.5 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <BusinessIcon fontSize="small" color="action" />
-            <Typography variant="body2" color="text.secondary">{company.sphere}</Typography>
+      <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px', p: '16px !important' }}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+          <Box
+            sx={{
+              width: 40,
+              height: 40,
+              borderRadius: '50%',
+              backgroundColor: getAvatarColor(company.name),
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <Typography sx={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>
+              {getInitials(company.name)}
+            </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <LocationOnIcon fontSize="small" color="action" />
-            <Typography variant="body2" color="text.secondary">{company.region}</Typography>
+
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+              <Typography variant="h2" noWrap>
+                {company.name}
+              </Typography>
+              {isRejected && <StatusBadge status={company.status} />}
+            </Box>
+
+            <Typography variant="body2" sx={{ mt: '2px' }}>
+              {company.sphere} · {company.region}
+            </Typography>
           </Box>
         </Box>
 
         {company.matchReasons && company.matchReasons.length > 0 && (
-          <Box sx={{ mb: 1 }}>
-            <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
-              Совпадения:
+          <Box>
+            <Typography
+              variant="caption"
+              sx={{ mb: '4px', display: 'block', fontSize: 11 }}
+            >
+              Совпадения
             </Typography>
-            <MatchBlock matchReasons={company.matchReasons} />
+            <MatchBlock matchReasons={company.matchReasons} compact />
           </Box>
         )}
       </CardContent>
 
-      <CardActions sx={{ px: 2, pb: 2 }}>
+      <Divider sx={{ mx: '16px' }} />
+
+      <CardActions sx={{ px: '16px', py: '12px !important' }}>
         {!isRejected && (
           <Button
-            size="small"
+            fullWidth
             variant="contained"
             onClick={(e) => { e.stopPropagation(); onSendRequest(company.id); }}
           >
@@ -64,7 +82,7 @@ export default function CompanyCard({ company, onSendRequest, onReapply, onClick
         )}
         {isRejected && !reapplyBlocked && (
           <Button
-            size="small"
+            fullWidth
             variant="outlined"
             onClick={(e) => { e.stopPropagation(); onReapply(company.id); }}
           >
@@ -73,8 +91,8 @@ export default function CompanyCard({ company, onSendRequest, onReapply, onClick
         )}
         {reapplyBlocked && (
           <Tooltip title={`Повторная подача доступна ${company.reapplyAvailableDate}`}>
-            <span>
-              <Button size="small" variant="outlined" disabled>
+            <span style={{ width: '100%' }}>
+              <Button fullWidth variant="outlined" disabled>
                 Подать заявку повторно
               </Button>
             </span>

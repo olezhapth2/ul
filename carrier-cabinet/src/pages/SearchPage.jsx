@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import CompanyCard from '../components/CompanyCard';
@@ -32,7 +31,7 @@ export default function SearchPage({ companies, onSendRequest, onReapply, onClic
     setDialogOpen(true);
   };
 
-  const handleDialogSend = (message) => {
+  const handleDialogSend = () => {
     onSendRequest(selectedCompanyId);
     setDialogOpen(false);
   };
@@ -41,9 +40,9 @@ export default function SearchPage({ companies, onSendRequest, onReapply, onClic
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ mb: 3 }}>Поиск перевозчиков</Typography>
+      <Typography variant="h1" sx={{ mb: '24px' }}>Поиск перевозчиков</Typography>
 
-      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+      <Box sx={{ display: 'flex', gap: '12px', mb: '24px', flexWrap: 'wrap' }}>
         <TextField
           size="small"
           placeholder="Поиск по названию"
@@ -52,11 +51,11 @@ export default function SearchPage({ companies, onSendRequest, onReapply, onClic
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon color="action" />
+                <SearchIcon sx={{ fontSize: 20, color: '#9AA1AC' }} />
               </InputAdornment>
             ),
           }}
-          sx={{ minWidth: 250 }}
+          sx={{ minWidth: 260 }}
         />
         <TextField
           size="small"
@@ -84,21 +83,26 @@ export default function SearchPage({ companies, onSendRequest, onReapply, onClic
         </TextField>
       </Box>
 
-      <Grid container spacing={2}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+          gap: '16px',
+        }}
+      >
         {filtered.map((company) => (
-          <Grid item xs={12} md={6} key={company.id}>
-            <CompanyCard
-              company={company}
-              onSendRequest={handleSendRequest}
-              onReapply={onReapply}
-              onClickCard={onClickCard}
-            />
-          </Grid>
+          <CompanyCard
+            key={company.id}
+            company={company}
+            onSendRequest={handleSendRequest}
+            onReapply={onReapply}
+            onClickCard={onClickCard}
+          />
         ))}
-      </Grid>
+      </Box>
 
       {filtered.length === 0 && (
-        <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
+        <Typography variant="body1" sx={{ textAlign: 'center', mt: '48px', color: '#5C6370' }}>
           Компании не найдены
         </Typography>
       )}
