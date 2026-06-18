@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Раздел «Компании» — Кабинет перевозчика B2B-платформы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E4E7EC;
+      --text-primary: #15171C;
+      --text-secondary: #5C6370;
+      --accent: #5B5FEF;
+      --accent-light: rgba(91,95,239,0.08);
+      --status-none-bg: #F1F2F4;
+      --status-none-text: #9AA1AC;
+      --status-pending-bg: #FFF6DD;
+      --status-pending-text: #B98900;
+      --status-accredited-bg: #E7F7EE;
+      --status-accredited-text: #1A8754;
+      --status-rejected-bg: #FDE8E8;
+      --status-rejected-text: #D33A3A;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .slide {
+      min-height: 100vh;
+      padding: 64px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .slide--dark {
+      background: #15171C;
+      color: #FFFFFF;
+    }
+
+    .slide--dark .text-secondary { color: rgba(255,255,255,0.6); }
+
+    .slide-number {
+      position: absolute;
+      top: 32px;
+      right: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+    }
+
+    .slide--dark .slide-number { color: rgba(255,255,255,0.3); }
+
+    h1 {
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+      max-width: 680px;
+    }
+
+    .text-secondary { color: var(--text-secondary); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .badge--accent {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .card--dark {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    .card h3 { margin-bottom: 8px; }
+
+    .card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .card--dark p { color: rgba(255,255,255,0.5); }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .card--dark .card-label { color: rgba(255,255,255,0.35); }
+
+    .stat-row {
+      display: flex;
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .flow-step {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .flow-step--1 { background: var(--status-none-bg); color: var(--status-none-text); }
+    .flow-step--2 { background: var(--status-pending-bg); color: var(--status-pending-text); }
+    .flow-step--3 { background: var(--status-accredited-bg); color: var(--status-accredited-text); }
+    .flow-step--4 { background: var(--status-rejected-bg); color: var(--status-rejected-text); }
+
+    .flow-arrow {
+      color: var(--text-secondary);
+      font-size: 18px;
+    }
+
+    .mockup-container {
+      margin-top: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .mockup-header {
+      background: #15171C;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mockup-header-text {
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .mockup-tabs {
+      display: flex;
+      gap: 2px;
+      margin-left: auto;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      padding: 3px;
+    }
+
+    .mockup-tab {
+      padding: 5px 14px;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .mockup-tab--active {
+      background: var(--accent);
+      color: #FFFFFF;
+    }
+
+    .mockup-body {
+      padding: 24px;
+    }
+
+    .mockup-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .mockup-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .mockup-card-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .mockup-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #FFFFFF;
+      flex-shrink: 0;
+    }
+
+    .mockup-card-meta {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .mockup-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .mockup-chip {
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .mockup-chip--primary {
+      background: rgba(91,95,239,0.16);
+    }
+
+    .mockup-btn {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      border: none;
+      cursor: default;
+    }
+
+    .mockup-btn--primary {
+      background: var(--accent);
+      color: #FFFFFF;
+    }
+
+    .mockup-btn--outlined {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+
+    .mockup-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .mockup-pill--none { background: var(--status-none-bg); color: var(--status-none-text); }
+    .mockup-pill--pending { background: var(--status-pending-bg); color: var(--status-pending-text); }
+    .mockup-pill--accredited { background: var(--status-accredited-bg); color: var(--status-accredited-text); }
+    .mockup-pill--rejected { background: var(--status-rejected-bg); color: var(--status-rejected-text); }
+
+    .mockup-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .mockup-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .profile-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 600;
+      color: #FFFFFF;
+      flex-shrink: 0;
+    }
+
+    .def-list {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px 16px;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .def-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+    }
+
+    .def-value {
+      font-size: 14px;
+    }
+
+    .stepper-mock {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 16px;
+    }
+
+    .stepper-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+    }
+
+    .stepper-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .stepper-dot--active {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #FFFFFF;
+    }
+
+    .stepper-dot--done {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #FFFFFF;
+    }
+
+    .stepper-line {
+      width: 2px;
+      height: 16px;
+      background: var(--border);
+      margin-left: 11px;
+    }
+
+    .stepper-text {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .stepper-text--muted {
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 14px;
+    }
+
+    .checklist-icon {
+      color: var(--text-secondary);
+      font-size: 18px;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .tab-item {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-item--active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .demo-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: var(--status-none-bg);
+      color: var(--status-none-text);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .code-block {
+      background: #1a1b26;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #a9b1d6;
+      overflow-x: auto;
+      margin-top: 16px;
+    }
+
+    .code-block .kw { color: #bb9af7; }
+    .code-block .str { color: #9ece6a; }
+    .code-block .cmt { color: #565f89; }
+    .code-block .fn { color: #7aa2f7; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tag--hypothesis {
+      background: rgba(91,95,239,0.12);
+      color: var(--accent);
+    }
+
+    .tag--decision {
+      background: var(--status-accredited-bg);
+      color: var(--status-accredited-text);
+    }
+
+    .tag--compromise {
+      background: var(--status-pending-bg);
+      color: var(--status-pending-text);
+    }
+
+    .tag--future {
+      background: var(--status-none-bg);
+      color: var(--status-none-text);
+    }
+
+    .list-check {
+      list-style: none;
+      padding: 0;
+    }
+
+    .list-check li {
+      padding: 6px 0;
+      font-size: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .list-check li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 900px) {
+      .slide { padding: 40px 24px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .mockup-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 32px; }
+      h2 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SLIDE 0 — Title -->
+  <section class="slide slide--dark" style="justify-content: center; align-items: center; text-align: center;">
+    <span class="slide-number">01 / 05</span>
+    <span class="badge badge--accent" style="background: rgba(91,95,239,0.2); margin-bottom: 24px;">B2B-логистическая платформа</span>
+    <h1 style="max-width: 700px;">Раздел «Компании»<br/>Кабинет перевозчика</h1>
+    <p class="subtitle" style="text-align: center; color: rgba(255,255,255,0.5); margin-top: 16px;">
+      Прототип двух экранов — поиск и профиль компании с переменным набором состояний отношений
+    </p>
+    <div class="stat-row" style="justify-content: center; margin-top: 48px;">
+      <div class="stat">
+        <div class="stat-value" style="color: #FFFFFF;">2</div>
+        <div class="stat-label" style="color: rgba(255,255,255,0.4);">экрана</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" style="color: #FFFFFF;">4</div>
+        <div class="stat-label" style="color: rgba(255,255,255,0.4);">состояния</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" style="color: #FFFFFF;">1</div>
+        <div class="stat-label" style="color: rgba(255,255,255,0.4);">компонент карточки</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" style="color: #FFFFFF;">10</div>
+        <div class="stat-label" style="color: rgba(255,255,255,0.4);">мок-компаний</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 1 — Key Decisions -->
+  <section class="slide">
+    <span class="slide-number">02 / 05</span>
+    <span class="tag tag--decision" style="margin-bottom: 16px;">Ключевые решения</span>
+    <h2>Структура раздела «Компании»</h2>
+    <p class="subtitle">Почему три режима, единая карточка и как это связано с существующим продуктом</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag--decision" style="margin-bottom: 12px;">Решение 1</span>
+        <h3>Три режима верхнего уровня</h3>
+        <p style="margin-bottom: 16px;">
+          Раздел построен на трёх режимах, а не на одной ленте:
+        </p>
+        <ul class="list-check">
+          <li><strong>Мои компании</strong> — только аккредитованные, рабочий ежедневный экран с лентой активности</li>
+          <li><strong>Запросы</strong> — исходящие и входящие отдельно (разные действия: я жду / я решаю)</li>
+          <li><strong>Поиск</strong> — холодный контур, компании без отношений</li>
+        </ul>
+        <p style="margin-top: 12px;">
+          Отказанные компании скрыты фильтром внутри «Запросы → Исходящие» — нечастый кейс не должен отъедать место у активных сценариев.
+        </p>
+      </div>
+
+      <div class="card">
+        <span class="tag tag--decision" style="margin-bottom: 12px;">Решение 2</span>
+        <h3>Единая карточка с переменным составом</h3>
+        <p style="margin-bottom: 16px;">
+          Компания проходит один путь через статусы. Пользователю важно видеть развитие отношений, а не смену сущности.
+        </p>
+        <div class="flow">
+          <span class="flow-step flow-step--1">Не аккредитована</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step flow-step--2">Запрос отправлен</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step flow-step--3">Аккредитована</span>
+        </div>
+        <div class="flow" style="margin-top: 8px;">
+          <span class="flow-step flow-step--1">Не аккредитована</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step flow-step--2">Запрос отправлен</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step flow-step--4">Отказано</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 24px; border-left: 3px solid var(--accent);">
+      <span class="tag tag--hypothesis" style="margin-bottom: 12px;">Контекст</span>
+      <h3>Связь с существующим продуктом</h3>
+      <p>
+        Аккредитация у текущего продукта существует как фича, но размазана по разным разделам — «Журнал заявок на аккредитацию», кнопка «Досье» с проверкой благонадёжности, виджет клиентов УЛ КАРГО, настройка требований аккредитации в «Организациях». Предложенная структура — это сведение разрозненной логики в одну связную сущность с понятной моделью отношений.
+      </p>
+    </div>
+  </section>
+
+  <!-- SLIDE 2 — Screen 1: Search -->
+  <section class="slide">
+    <span class="slide-number">03 / 05</span>
+    <span class="tag tag--hypothesis" style="margin-bottom: 16px;">Экран 1</span>
+    <h2>Поиск перевозчиков</h2>
+    <p class="subtitle">Холодный контур — компании без отношений. Блок совпадений как аналог «общих знакомых»</p>
+
+    <div class="grid-2">
+      <div>
+        <div class="mockup-container">
+          <div class="mockup-header">
+            <span style="color: rgba(255,255,255,0.5); font-size: 16px;">📦</span>
+            <span class="mockup-header-text">Кабинет перевозчика</span>
+            <div class="mockup-tabs">
+              <span class="mockup-tab mockup-tab--active">Поиск</span>
+              <span class="mockup-tab">Профиль</span>
+            </div>
+            <span style="width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); margin-left: auto;">ОД</span>
+          </div>
+          <div class="mockup-body" style="background: var(--bg);">
+            <div class="mockup-title">Поиск перевозчиков</div>
+            <div class="mockup-grid">
+              <!-- Card 1 -->
+              <div class="mockup-card">
+                <div class="mockup-card-row">
+                  <div class="mockup-avatar" style="background: #E8D5F5;">ТЛ</div>
+                  <div style="flex: 1;">
+                    <div style="font-size: 15px; font-weight: 600;">ТрансЛогистик Групп</div>
+                    <div class="mockup-card-meta">Промышленные товары · Москва</div>
+                  </div>
+                </div>
+                <div class="mockup-chips">
+                  <span class="mockup-chip mockup-chip--primary">Часто публикует грузы</span>
+                  <span class="mockup-chip">Совпадение по типу</span>
+                  <span class="mockup-chip">Высокий объём</span>
+                </div>
+                <div class="mockup-btn mockup-btn--primary">Отправить запрос</div>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="mockup-card">
+                <div class="mockup-card-row">
+                  <div class="mockup-avatar" style="background: #D5E8F5;">ВТ</div>
+                  <div style="flex: 1;">
+                    <div style="font-size: 15px; font-weight: 600;">ВостокТранс</div>
+                    <div class="mockup-card-meta">Пищевая продукция · Казань</div>
+                  </div>
+                </div>
+                <div class="mockup-chips">
+                  <span class="mockup-chip mockup-chip--primary">Часто публикует грузы</span>
+                  <span class="mockup-chip">Совпадение по типу</span>
+                </div>
+                <div class="mockup-btn mockup-btn--primary">Отправить запрос</div>
+              </div>
+
+              <!-- Card 3 with rejected -->
+              <div class="mockup-card">
+                <div class="mockup-card-row">
+                  <div class="mockup-avatar" style="background: #F5E8D5;">КЛ</div>
+                  <div style="flex: 1;">
+                    <div style="font-size: 15px; font-weight: 600;">КавказЛогистик</div>
+                    <div class="mockup-card-meta">Продукты питания · Краснодар</div>
+                  </div>
+                  <span class="mockup-pill mockup-pill--rejected">
+                    <span class="mockup-dot" style="background: var(--status-rejected-text);"></span>
+                    Отказано
+                  </span>
+                </div>
+                <div class="mockup-chips">
+                  <span class="mockup-chip">Совпадение по типу</span>
+                </div>
+                <div class="mockup-btn mockup-btn--outlined">Подать заявку повторно</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom: 16px;">
+          <span class="tag tag--hypothesis" style="margin-bottom: 12px;">Гипотеза H1</span>
+          <h3>Блок совпадений как «общие знакомые»</h3>
+          <p>
+            В карточке выведен блок совпадений с профилем перевозчика — общие маршруты, тип груза, частота публикации. Гипотеза: такой «тёплый» сигнал повышает долю запросов, доходящих до аккредитации, вместо рассылки вслепую.
+          </p>
+        </div>
+
+        <div class="card" style="margin-bottom: 16px;">
+          <h3>Логика карточки</h3>
+          <ul class="list-check">
+            <li>Статус <code>none</code> → кнопка «Отправить запрос на аккредитацию»</li>
+            <li>Статус <code>rejected</code> → кнопка «Подать заявку повторно» (blocked, если дата в будущем)</li>
+            <li>Клик по карточке → переход на экран профиля</li>
+            <li>Сетка: <code>repeat(auto-fill, minmax(320px, 1fr))</code></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Фильтры</h3>
+          <p>Поиск по названию + select-фильтры «Регион» и «Тип груза». Визуально рабочие, фильтруют по массиву <code>none</code> + <code>rejected</code>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3 — Screen 2: Profile -->
+  <section class="slide">
+    <span class="slide-number">04 / 05</span>
+    <span class="tag tag--hypothesis" style="margin-bottom: 16px;">Экран 2</span>
+    <h2>Профиль компании</h2>
+    <p class="subtitle">Самый показательный экран — один компонент отрабатывает все 4 состояния отношений</p>
+
+    <div class="grid-2" style="margin-bottom: 32px;">
+      <!-- Profile Header Mock -->
+      <div class="mockup-container">
+        <div class="mockup-header">
+          <span style="color: rgba(255,255,255,0.5); font-size: 16px;">📦</span>
+          <span class="mockup-header-text">Кабинет перевозчика</span>
+          <div class="mockup-tabs">
+            <span class="mockup-tab">Поиск</span>
+            <span class="mockup-tab mockup-tab--active">Профиль</span>
+          </div>
+          <span style="width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); margin-left: auto;">ОД</span>
+        </div>
+        <div class="mockup-body" style="background: var(--bg);">
+          <div style="font-size: 13px; color: var(--accent); margin-bottom: 12px;">← Назад к поиску</div>
+          <div class="card" style="margin-bottom: 16px;">
+            <div class="profile-header">
+              <div class="profile-avatar" style="background: #E8D5F5;">ТЛ</div>
+              <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <span style="font-size: 20px; font-weight: 700;">ТрансЛогистик Групп</span>
+                  <span class="mockup-pill mockup-pill--accredited">
+                    <span class="mockup-dot" style="background: var(--status-accredited-text);"></span>
+                    Аккредитована
+                  </span>
+                </div>
+                <div class="def-list">
+                  <span class="def-label">ИНН</span><span class="def-value">7701234567</span>
+                  <span class="def-label">Регион</span><span class="def-value">Москва</span>
+                  <span class="def-label">Сфера</span><span class="def-value">Промышленные товары</span>
+                  <span class="def-label">Отправок / мес</span><span class="def-value">45</span>
+                </div>
+              </div>
+              <span class="demo-chip">⚙ demo</span>
+            </div>
+          </div>
+
+          <!-- Accredited body -->
+          <div class="card">
+            <div class="tab-bar">
+              <span class="tab-item tab-item--active">Заявки</span>
+              <span class="tab-item">История сотрудничества</span>
+            </div>
+            <table>
+              <thead>
+                <tr><th>Маршрут</th><th>Тип груза</th><th style="text-align:right">Ставка</th><th style="text-align:right">Действие</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Новосибирск — Москва</td><td>Паллеты</td><td style="text-align:right; font-weight: 500;">42</td><td style="text-align:right"><span style="font-size: 12px; color: var(--accent); border: 1px solid var(--border); padding: 3px 10px; border-radius: 6px;">Поставить</span></td></tr>
+                <tr><td>Новосибирск — Красноярск</td><td>Контейнеры</td><td style="text-align:right; font-weight: 500;">38</td><td style="text-align:right"><span style="font-size: 12px; color: var(--accent); border: 1px solid var(--border); padding: 3px 10px; border-radius: 6px;">Поставить</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom: 16px;">
+          <h3>Шапка профиля</h3>
+          <ul class="list-check">
+            <li>Аватар 56px (круглый, цвет по хэшу названия)</li>
+            <li>Название H1 + StatusBadge в одной строке</li>
+            <li>Definition list: лейбл серый 12px caps + значение</li>
+            <li>MatchBlock с совпадениями</li>
+            <li>Demo-переключатель — Chip с иконкой⚙, Popover со списком</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Dev-переключатель</h3>
+          <p>
+            Маленький Chip в правом верхнем углу. По клику — Popover со списком статусов. Подпись «demo» мелким серым текстом — почти незаметен на скриншоте, но доступен по клику. Позволяет показать все 4 состояния одной карточки без прохождения флоу.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom: 16px;">Четыре состояния тела профиля</h3>
+    <div class="grid-2">
+      <div class="card">
+        <div class="mockup-pill mockup-pill--none" style="margin-bottom: 12px;">
+          <span class="mockup-dot" style="background: var(--status-none-text);"></span>
+          Не аккредитована
+        </div>
+        <p>Описание компании + кнопка «Отправить запрос на аккредитацию». Открывает SendRequestDialog.</p>
+      </div>
+
+      <div class="card">
+        <div class="mockup-pill mockup-pill--pending" style="margin-bottom: 12px;">
+          <span class="mockup-dot" style="background: var(--status-pending-text);"></span>
+          Запрос отправлен
+        </div>
+        <div class="stepper-mock">
+          <div class="stepper-item">
+            <div class="stepper-dot stepper-dot--done">✓</div>
+            <span class="stepper-text">Заявка отправлена</span>
+          </div>
+          <div class="stepper-line"></div>
+          <div class="stepper-item">
+            <div class="stepper-dot stepper-dot--active">2</div>
+            <span class="stepper-text">На проверке у компании</span>
+          </div>
+          <div class="stepper-line"></div>
+          <div class="stepper-item">
+            <div class="stepper-dot"></div>
+            <span class="stepper-text stepper-text--muted">Ожидаем решение</span>
+          </div>
+        </div>
+        <p style="margin-top: 8px;">Do 5 рабочих дней · Кнопка «Отменить запрос» с confirm-диалогом</p>
+      </div>
+
+      <div class="card">
+        <div class="mockup-pill mockup-pill--accredited" style="margin-bottom: 12px;">
+          <span class="mockup-dot" style="background: var(--status-accredited-text);"></span>
+          Аккредитована
+        </div>
+        <p>Tabs: «Заявки» (таблица с маршрутами/ставками) + «История сотрудничества» (плейсхолдер). Кнопка «Разорвать отношения» с confirm-диалогом → статус <code>none</code>.</p>
+      </div>
+
+      <div class="card">
+        <div class="mockup-pill mockup-pill--rejected" style="margin-bottom: 12px;">
+          <span class="mockup-dot" style="background: var(--status-rejected-text);"></span>
+          Отказано
+        </div>
+        <div class="section-divider"></div>
+        <p style="margin: 8px 0;"><strong>Причина:</strong> Не предоставлена лицензия</p>
+        <div class="section-divider"></div>
+        <p style="margin: 8px 0;"><strong>Что исправить:</strong></p>
+        <div class="checklist-item"><span class="checklist-icon">○</span> Получить лицензию</div>
+        <div class="checklist-item"><span class="checklist-icon">○</span> Обновить документы</div>
+        <div class="section-divider"></div>
+        <p style="margin: 8px 0;"><strong>Когда повторить:</strong> Уже можно / с даты</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4 — Compromises & Future -->
+  <section class="slide">
+    <span class="slide-number">05 / 05</span>
+    <span class="tag tag--compromise" style="margin-bottom: 16px;">Компромиссы и планы</span>
+    <h2>Что сделано, чего нет, что дальше</h2>
+
+    <div class="grid-3" style="margin-top: 32px;">
+      <div class="card">
+        <span class="tag tag--compromise" style="margin-bottom: 12px;">Компромиссы</span>
+        <h3>Что осознанно не делалось</h3>
+        <ul class="list-check">
+          <li>Визуальная прорисовка главного экрана и входящих запросов (IA прописана текстово)</li>
+          <li>Кейс с несколькими юрлицами у одного грузовладельца (edge case в описании, не в макете)</li>
+          <li>Инструментация для проверки гипотез (метрики сформулированы, план аналитики не развёрнут)</li>
+          <li>Глубокая проработка микрокопирайтинга для пустых состояний и ошибок</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="tag tag--future" style="margin-bottom: 12px;">При большем времени</span>
+        <h3>Что доработалось бы</h3>
+        <ul class="list-check">
+          <li>Пользовательское тестирование с 3–5 логистами: «найди перевозчика» / «обработай запрос»</li>
+          <li>Оставшиеся экраны: главный + входящие запросы</li>
+          <li>Кейс с несколькими юрлицами до полноценного UI</li>
+          <li>Прозрачный статус-степпер с ориентировочным сроком ответа на основе истории компании</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="tag tag--hypothesis" style="margin-bottom: 12px;">Гипотезы</span>
+        <h3>Что проверяем</h3>
+        <ul class="list-check">
+          <li><strong>H1:</strong> Блок совпадений (общие маршруты/тип груза) повышает конверсию запросов в аккредитацию</li>
+          <li><strong>H2:</strong> Разделение исходящих/входящих запросов снижает когнитивную нагрузку</li>
+          <li><strong>H3:</strong> Прозрачный статус-степпер снижает количество повторных запросов от перевозчиков</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 24px; border-left: 3px solid var(--accent);">
+      <h3>Стек прототипа</h3>
+      <p style="margin-top: 8px;">
+        React + Vite + MUI (Material UI) · Все данные — мок в памяти (useState) · Без API, localStorage, роутера
+        · Переключение экранов — через состояние в App.jsx · Демо-режим — dev-переключатель статуса в профиле
+      </p>
+      <div class="code-block" style="margin-top: 12px;">
+        <span class="cmt">// Все 상태ы — в React state, без бэкенда</span><br/>
+        <span class="kw">const</span> [companies, setCompanies] = <span class="fn">useState</span>(initialCompanies);<br/>
+        <span class="kw">const</span> [screen, setScreen] = <span class="fn">useState</span>(<span class="str">'search'</span>);<br/>
+        <span class="kw">const</span> [selectedCompanyId, setSelectedCompanyId] = <span class="fn">useState</span>(<span class="str">null</span>);
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
